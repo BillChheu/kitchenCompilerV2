@@ -18,7 +18,38 @@ function createToken(user) {
 
 
 module.exports = {
+
     Mutation: {
+
+        async login(_, {username, password}) {
+            const {errors, valid} = validation.validateUserLogin(username, password)
+            if (!valid) {
+                throw new UserInputError("Errors", {errors}) 
+            }   
+            const user = await User.findOne({username})
+
+            if (!user) {
+               errors.general = "User not found!"
+               throw new UserInputError("User not found", {errors}) 
+            }
+
+            const match = await bcrypt.compare(password, user.password)
+            if (!match) {
+                errors.general = "Wrong credentials!"
+                throw new UserInputError("Wrong credentials!", {errors})
+            }
+            const token = createToken(user)
+
+            return {
+                ...user._doc,
+                id: user._id,
+                token
+
+            }
+        },
+
+
+
        async register(_, {registerInput: {username, email, password, confirmPassword}}, context, info) {
 
            
