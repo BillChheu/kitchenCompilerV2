@@ -1,3 +1,4 @@
+const { UserInputError } = require("apollo-server");
 const Ingredient = require("../../models/Ingredient")
 
 module.exports = {
@@ -14,6 +15,12 @@ module.exports = {
       },
       Mutation: {
           async addIngredient(_,{name}) {
+
+            const lookingForIngredient = Ingredient.find({name});
+            if (lookingForIngredient) {
+                throw new UserInputError("This ingredient already exists!")
+            }
+
             const addedIngredient = new Ingredient({
                 name,
                 createdAt: new Date().toISOString()

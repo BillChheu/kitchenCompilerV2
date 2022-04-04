@@ -3,8 +3,10 @@ const jwt = require("jsonwebtoken")
 const {UserInputError} = require("apollo-server")
 
 const User = require("../../models/User")
+const Ingredient = require("../../models/Ingredient")
 const {SECRET_KEY} = require("../../config")
 const validation = require("../../utils/validation")
+const checkAuth = require("../../utils/check-auth")
 
 function createToken(user) {
     return jwt.sign(
@@ -22,6 +24,7 @@ module.exports = {
     Mutation: {
 
         async login(_, {username, password}) {
+            
             const {errors, valid} = validation.validateUserLogin(username, password)
             if (!valid) {
                 throw new UserInputError("Errors", {errors}) 
@@ -46,6 +49,27 @@ module.exports = {
                 token
 
             }
+        },
+
+        async addToKitchen(_, {name}, context) {
+            const jwtUser = checkAuth(context);
+
+            const ingredientExists = await Ingredient.findOne({name})
+            if (!ingredientExists) {
+                throw new UserInputError("Ingredient does not exist!")
+            } 
+            
+            const user = await User.findById(jwtUser.id)
+            
+            if (!user.kitchen.includes(name.toLowerCase())) {
+                user.kitchen.push(name.toLowerCase());
+                const result = await user.save();
+            } else {
+                throw new UserInputError("Ingredient already exists in your kitchen!")
+            }
+            return user;
+
+            
         },
 
 
@@ -81,6 +105,7 @@ module.exports = {
                 username,
                 password,
                 email,
+                kitchen: [],
                 createdAt: new Date().toISOString()
             })
 

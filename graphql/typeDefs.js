@@ -12,6 +12,7 @@ module.exports = gql`
         email: String!
         username: String!
         token: String!
+        kitchen: [String]
         createdAt: String!
     }
 
@@ -30,6 +31,7 @@ module.exports = gql`
     type Mutation {
         register(registerInput: RegisterInput): User!
         login(username: String!, password: String!): User!
+        addToKitchen(name: String!): User!
 
         addIngredient(name: String!): Ingredient!
     }
