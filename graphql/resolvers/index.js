@@ -1,6 +1,6 @@
 const ingredientResolver = require("./ingredients");
 const userResolver = require("./users");
-
+const recipeResolver = require("./recipe")
 
 module.exports = {
     Query: {
@@ -8,6 +8,7 @@ module.exports = {
     },
     Mutation: {
         ...userResolver.Mutation,
-        ...ingredientResolver.Mutation
+        ...ingredientResolver.Mutation,
+        ...recipeResolver.Mutation
     }
 }

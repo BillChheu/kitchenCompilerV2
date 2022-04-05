@@ -12,6 +12,7 @@ let server = new ApolloServer({
     context: ({req}) => ({req}) 
 });
 
+
 mongoose.connect(MONGODB, { useNewUrlParser: true})
     .then( () => {
         console

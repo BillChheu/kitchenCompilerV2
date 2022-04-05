@@ -16,6 +16,14 @@ module.exports = gql`
         createdAt: String!
     }
 
+    type Recipe {
+        id: ID!
+        title: String!
+        url: String!
+        ingredients: [String!]
+        createdAt: String!
+    }
+
     input RegisterInput {
         username: String!
         password: String!
@@ -34,5 +42,7 @@ module.exports = gql`
         addToKitchen(name: String!): User!
 
         addIngredient(name: String!): Ingredient!
+        
+        addRecipe(url: String!): Recipe
     }
  `;
