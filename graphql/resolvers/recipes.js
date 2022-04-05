@@ -1,3 +1,4 @@
+const {parse} = require("recipe-ingredient-parser-v3")
 const Recipe = require("../../models/Recipe")
 
 const {PythonShell} = require("python-shell")
@@ -15,10 +16,17 @@ module.exports = {
             
             }) */
 
-            PythonShell.run("scripts/scraper.py", null, (err, results) => {
+            const options = {
+                args: [url]
+            }
+
+            PythonShell.run("scripts/scraper.py", options, (err, results) => {
                 if (err)
                     throw err;
-                console.log(results);
+                console.log(results)
+           //     const temp = parse(results[2], "eng")
+              //  console.log(temp)
+                
             })
 
         }

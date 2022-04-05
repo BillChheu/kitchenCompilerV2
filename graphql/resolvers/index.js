@@ -1,6 +1,6 @@
 const ingredientResolver = require("./ingredients");
 const userResolver = require("./users");
-const recipeResolver = require("./recipe")
+const recipeResolver = require("./recipes.js")
 
 module.exports = {
     Query: {
